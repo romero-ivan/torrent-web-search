@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TorLink - Decentralized Torrent Indexer</title>
+  <meta name="description" content="A clean, fast, and minimal decentralized torrent search interface.">
+  <meta name="color-scheme" content="dark">
+  <script>
+    // Prevent theme flash
+    {
+      const colorScheme = localStorage.getItem("color-scheme") || "dark";
+      document.querySelector('meta[name="color-scheme"]').content = colorScheme;
+      document.documentElement.setAttribute('data-theme', colorScheme);
+    }
+  </script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div class="app-layout">
+    <header class="app-header">
+      <div class="header-logo">
+        <span class="logo-txt">TorLink</span>
+        <span class="logo-sub">Search Proxy</span>
+      </div>
+      
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle color theme">
+        <span class="theme-icon-dark">Dark Mode</span>
+        <span class="theme-icon-light">Light Mode</span>
+      </button>
+    </header>
+
+    <main class="app-main">
+      <!-- Search Panel -->
+      <section class="search-panel">
+        <form id="search-form" class="search-form">
+          <div class="search-box">
+            <input 
+              type="search" 
+              id="search-input" 
+              placeholder="Search movies, tv, games, software, books..." 
+              required 
+              autocomplete="off"
+              aria-label="Search query"
+            >
+            <button type="submit" class="btn-primary">Search</button>
+          </div>
+
+          <div class="search-controls">
+            <div class="control-group">
+              <label for="sort-select">Sort by</label>
+              <select id="sort-select">
+                <option value="relevance" selected>Relevance</option>
+                <option value="seeders">Seeders</option>
+                <option value="size">Size</option>
+                <option value="date">Upload Date</option>
+              </select>
+            </div>
+
+            <div class="control-group">
+              <label for="limit-select">Per page</label>
+              <select id="limit-select">
+                <option value="20" selected>20 items</option>
+                <option value="50">50 items</option>
+                <option value="100">100 items</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <!-- Category Filters -->
+        <nav class="category-tabs" role="tablist" aria-label="Search categories">
+          <button class="tab-btn active" data-category="" role="tab" aria-selected="true">All</button>
+          <button class="tab-btn" data-category="2" role="tab" aria-selected="false">Movies</button>
+          <button class="tab-btn" data-category="3" role="tab" aria-selected="false">TV Shows</button>
+          <button class="tab-btn" data-category="4" role="tab" aria-selected="false">Anime</button>
+          <button class="tab-btn" data-category="6" role="tab" aria-selected="false">Games</button>
+          <button class="tab-btn" data-category="7" role="tab" aria-selected="false">Music</button>
+          <button class="tab-btn" data-category="8" role="tab" aria-selected="false">Books</button>
+          <button class="tab-btn" data-category="1" role="tab" aria-selected="false">Software</button>
+        </nav>
+      </section>
+
+      <!-- Content Display Area -->
+      <section class="content-view">
+        
+        <!-- Initial State -->
+        <div id="state-initial" class="view-state">
+          <h2 class="state-title">Decentralized Index</h2>
+          <p class="state-desc">Query millions of indexed torrents in real-time across decentralized networks.</p>
+          <div class="suggested-searches">
+            <span class="suggest-label">Suggested searches:</span>
+            <div class="tag-list">
+              <button class="search-tag-btn">Cyberpunk 2077</button>
+              <button class="search-tag-btn">Star Wars</button>
+              <button class="search-tag-btn">The Matrix</button>
+              <button class="search-tag-btn">Linux Ubuntu</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="state-loading" class="view-state hidden">
+          <div class="loading-indicator">
+            <div class="bar-loader"></div>
+          </div>
+          <p class="state-desc">Fetching metadata from indexer...</p>
+        </div>
+
+        <!-- Error State -->
+        <div id="state-error" class="view-state hidden">
+          <h2 class="state-title error-text">Search failed</h2>
+          <p id="error-message" class="state-desc">Unable to retrieve results. Please verify your connection.</p>
+          <button id="retry-btn" class="btn-secondary">Retry</button>
+        </div>
+
+        <!-- Empty State -->
+        <div id="state-empty" class="view-state hidden">
+          <h2 class="state-title">No results found</h2>
+          <p class="state-desc">No torrents matched your search query. Try using fewer or broader keywords.</p>
+        </div>
+
+        <!-- Results Table Wrapper -->
+        <div id="results-wrapper" class="results-wrapper hidden">
+          <div class="results-info">
+            <span id="results-count">Results</span>
+          </div>
+
+          <div class="table-container">
+            <table class="results-table">
+              <thead>
+                <tr>
+                  <th class="col-title">Name</th>
+                  <th class="col-category">Category</th>
+                  <th class="col-size">Size</th>
+                  <th class="col-seeders">Seeders</th>
+                  <th class="col-leechers">Leechers</th>
+                  <th class="col-date">Date</th>
+                  <th class="col-actions">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="results-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Footer -->
+          <footer class="pagination-controls">
+            <button id="prev-page-btn" class="btn-secondary" disabled>Previous</button>
+            <span id="page-indicator">Page 1</span>
+            <button id="next-page-btn" class="btn-secondary">Next</button>
+          </footer>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <!-- Minimal Toast Notification -->
+  <div id="toast" class="toast-popup" role="alert" aria-live="polite">
+    <span id="toast-text">Copied to clipboard</span>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

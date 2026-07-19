@@ -1,0 +1,12 @@
+{
+  "name": "torrent-web-search",
+  "version": "1.0.0",
+  "description": "Local Web GUI to search torrents via Bitsearch API proxy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
