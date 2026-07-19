@@ -585,5 +585,82 @@ body {
   .results-table th.col-date,
   .results-table td:nth-child(6) {
     display: none;
-  }
 }
+
+/* Kawaii Mode styling */
+[data-theme="kawaii"] {
+  --color-canvas: #fff0f5; /* lavender blush */
+  --color-panel: #fff0f5;
+  --color-card: #ffe4e1; /* misty rose */
+  --color-header: #ffd1dc; /* pastel pink */
+  --color-border: #ffb7c5; /* soft pink border */
+  --color-border-hover: #ff8da1;
+  
+  --color-text-primary: #d02090; /* deep pink */
+  --color-text-secondary: #ff69b4; /* hot pink */
+  --color-text-muted: #ff7f50; /* coral */
+  
+  --color-accent-bg: #ff69b4;
+  --color-accent-text: #ffffff;
+  --color-focus-ring: rgba(255, 105, 180, 0.4);
+  
+  --color-green: #32cd32; /* lime green */
+  --color-red: #ff4500; /* orange red */
+}
+
+/* Custom kawaii decorations */
+[data-theme="kawaii"] .logo-txt {
+  background: linear-gradient(90deg, #ff69b4, #ffb6c1, #ba55d3, #00bfff, #ff69b4);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: kawaii-rainbow 8s ease infinite;
+}
+
+[data-theme="kawaii"] .logo-txt::after {
+  content: " (uwu) 🌸";
+  font-size: 0.8rem;
+  font-weight: 500;
+  -webkit-text-fill-color: #d02090; /* solid color override */
+}
+
+[data-theme="kawaii"] .logo-sub::after {
+  content: " (nwn)";
+}
+
+[data-theme="kawaii"] .results-table tbody tr:hover {
+  background-color: rgba(255, 105, 180, 0.08);
+}
+
+[data-theme="kawaii"] .row-category {
+  background-color: #ffd1dc;
+  color: #d02090;
+  border: 1px dashed #ff69b4;
+}
+
+[data-theme="kawaii"] .btn-primary {
+  background: linear-gradient(135deg, #ff69b4 0%, #ffb6c1 100%);
+  color: white;
+}
+
+[data-theme="kawaii"] .theme-toggle-btn {
+  background-color: #ffd1dc;
+  color: #d02090;
+  border-color: #ffb7c5;
+}
+
+[data-theme="kawaii"] .theme-toggle-btn:hover {
+  background-color: #ffc0cb;
+}
+
+[data-theme="kawaii"] .btn-table-action.accent {
+  background: linear-gradient(135deg, #ff69b4 0%, #ffb6c1 100%);
+  color: white;
+}
+
+@keyframes kawaii-rainbow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+

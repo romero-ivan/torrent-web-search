@@ -56,7 +56,6 @@ const toastText = document.getElementById('toast-text');
 // Initialize App
 document.addEventListener('DOMContentLoaded', () => {
   setupEventListeners();
-  setupTags();
   restoreTheme();
 });
 
@@ -132,18 +131,7 @@ function setupEventListeners() {
   themeToggle.addEventListener('click', toggleTheme);
 }
 
-// Setup quick-search tags
-function setupTags() {
-  const tags = document.querySelectorAll('.search-tag-btn');
-  tags.forEach(tag => {
-    tag.addEventListener('click', () => {
-      searchInput.value = tag.textContent;
-      currentQuery = tag.textContent;
-      currentPage = 1;
-      performSearch();
-    });
-  });
-}
+
 
 // Perform API Search request
 async function performSearch() {
@@ -346,18 +334,31 @@ function showToast(message) {
   }, 2500);
 }
 
-// Theme handling (Light / Dark mode)
+// Theme handling (Dark / Light / Kawaii)
 function toggleTheme() {
   const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-  const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+  let newTheme = 'dark';
+  if (currentTheme === 'dark') newTheme = 'light';
+  else if (currentTheme === 'light') newTheme = 'kawaii';
+  else newTheme = 'dark';
   
-  document.documentElement.setAttribute('data-theme', newTheme);
-  document.querySelector('meta[name="color-scheme"]').content = newTheme;
-  localStorage.setItem('color-scheme', newTheme);
+  applyTheme(newTheme);
 }
 
 function restoreTheme() {
   const savedTheme = localStorage.getItem('color-scheme') || 'dark';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  document.querySelector('meta[name="color-scheme"]').content = savedTheme;
+  applyTheme(savedTheme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  document.querySelector('meta[name="color-scheme"]').content = (theme === 'light' || theme === 'kawaii') ? 'light' : 'dark';
+  localStorage.setItem('color-scheme', theme);
+  
+  const textEl = document.getElementById('theme-btn-text');
+  if (textEl) {
+    if (theme === 'dark') textEl.textContent = 'Theme: Dark';
+    else if (theme === 'light') textEl.textContent = 'Theme: Light';
+    else if (theme === 'kawaii') textEl.textContent = 'Theme: Kawaii (uwu)';
+  }
 }
