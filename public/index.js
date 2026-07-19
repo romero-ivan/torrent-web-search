@@ -4,6 +4,7 @@ let currentPage = 1;
 let currentSort = 'relevance';
 let currentLimit = '20';
 let currentCategory = ''; // Empty means "All"
+let currentResults = []; // Cache for current search results to allow dynamic re-renders on theme change
 
 // Trackers to append to magnet links for faster peer discovery
 const PUBLIC_TRACKERS = [
@@ -25,6 +26,18 @@ const CATEGORY_MAP = {
   '6': 'Game',
   '7': 'Music',
   '8': 'Book'
+};
+
+// Mapping for Kawaii mode (uwu/emojis)
+const KAWAII_CATEGORY_MAP = {
+  '1': 'Cute App 💻',
+  '2': 'Cuty Movie 🎬',
+  '3': 'TV Show (uwu) 📺',
+  '4': 'Kawaii Anime! 🌸',
+  '5': 'Mobile App (nwn) 📱',
+  '6': 'Fun Game! 🎮',
+  '7': 'Sweet Melody 🎵',
+  '8': 'Cute Book 📚'
 };
 
 // DOM Elements
@@ -160,10 +173,12 @@ async function performSearch() {
     const data = await response.json();
     
     if (!data.results || data.results.length === 0) {
+      currentResults = [];
       showState('empty');
       return;
     }
 
+    currentResults = data.results;
     renderResults(data.results);
     showState('results');
   } catch (error) {
@@ -221,8 +236,11 @@ function renderResults(results) {
     const magnetLink = `magnet:?xt=urn:btih:${torrent.infohash}&dn=${encodeURIComponent(torrent.title)}${trackersQuery}`;
 
     // Get Human Category Info
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     const catId = String(torrent.category);
-    const categoryName = CATEGORY_MAP[catId] || 'Other';
+    const categoryName = currentTheme === 'kawaii'
+      ? (KAWAII_CATEGORY_MAP[catId] || 'Cute Stuff 📦')
+      : (CATEGORY_MAP[catId] || 'Other');
 
     // Format fields
     const formattedSize = formatSize(torrent.size);
@@ -360,5 +378,28 @@ function applyTheme(theme) {
     if (theme === 'dark') textEl.textContent = 'Theme: Dark';
     else if (theme === 'light') textEl.textContent = 'Theme: Light';
     else if (theme === 'kawaii') textEl.textContent = 'Theme: Kawaii (uwu)';
+  }
+
+  // Dynamic content styling additions
+  const searchInput = document.getElementById('search-input');
+  const searchBtn = document.querySelector('.btn-primary');
+  const initialTitle = document.querySelector('#state-initial .state-title');
+  const initialDesc = document.querySelector('#state-initial .state-desc');
+
+  if (theme === 'kawaii') {
+    if (searchInput) searchInput.placeholder = 'Search for cutie things here... (｡♥‿♥｡) uwu';
+    if (searchBtn) searchBtn.textContent = 'Search! (◕‿◕✿)';
+    if (initialTitle) initialTitle.textContent = 'Decentralized Index (uwu)';
+    if (initialDesc) initialDesc.textContent = 'Query millions of cute torrents in real-time! 🌸 nwn';
+  } else {
+    if (searchInput) searchInput.placeholder = 'Search movies, tv, games, software, books...';
+    if (searchBtn) searchBtn.textContent = 'Search';
+    if (initialTitle) initialTitle.textContent = 'Decentralized Index';
+    if (initialDesc) initialDesc.textContent = 'Query millions of indexed torrents in real-time across decentralized networks.';
+  }
+
+  // If there are results currently displayed, re-render them to update the category names
+  if (currentResults && currentResults.length > 0) {
+    renderResults(currentResults);
   }
 }

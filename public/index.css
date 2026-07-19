@@ -588,7 +588,7 @@ body {
   }
 }
 
-/* Kawaii Mode styling */
+/* Kawaii Mode styling - Over the top, bubblegum pink, comic sans, and custom cursor */
 [data-theme="kawaii"] {
   --color-canvas: #fff0f5; /* lavender blush */
   --color-panel: #fff0f5;
@@ -609,6 +609,21 @@ body {
   --color-red: #ff4500; /* orange red */
 }
 
+/* Force Comic Sans for the ultimate cute/derpy style */
+[data-theme="kawaii"] * {
+  font-family: 'Comic Sans MS', 'Comic Sans', 'Outfit', cursive, sans-serif !important;
+}
+
+/* Custom cursor trail / flower pointer */
+[data-theme="kawaii"],
+[data-theme="kawaii"] button,
+[data-theme="kawaii"] a,
+[data-theme="kawaii"] select,
+[data-theme="kawaii"] input,
+[data-theme="kawaii"] tr {
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' style='font-size:22px'><text y='22'>🌸</text></svg>"), auto !important;
+}
+
 /* Custom kawaii decorations */
 [data-theme="kawaii"] .logo-txt {
   background: linear-gradient(90deg, #ff69b4, #ffb6c1, #ba55d3, #00bfff, #ff69b4);
@@ -616,47 +631,109 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   animation: kawaii-rainbow 8s ease infinite;
+  text-shadow: 2px 2px 0px #ffe4e1;
 }
 
 [data-theme="kawaii"] .logo-txt::after {
   content: " (uwu) 🌸";
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: 700;
   -webkit-text-fill-color: #d02090; /* solid color override */
 }
 
 [data-theme="kawaii"] .logo-sub::after {
-  content: " (nwn)";
+  content: " (nwn)☆*:.｡.";
 }
 
 [data-theme="kawaii"] .results-table tbody tr:hover {
-  background-color: rgba(255, 105, 180, 0.08);
+  background-color: rgba(255, 105, 180, 0.12);
+  transform: scale(1.005);
+}
+
+[data-theme="kawaii"] .results-table tbody tr {
+  transition: transform 0.15s ease, background-color 0.15s ease;
 }
 
 [data-theme="kawaii"] .row-category {
   background-color: #ffd1dc;
   color: #d02090;
-  border: 1px dashed #ff69b4;
+  border: 2px dashed #ff69b4;
+  font-weight: 700;
+}
+
+[data-theme="kawaii"] #search-input {
+  background-color: #ffffff;
+  border: 2px dashed #ff69b4;
+  color: #d02090;
+  font-weight: 700;
+}
+
+[data-theme="kawaii"] #search-input:focus {
+  border-color: #d02090;
+  box-shadow: 0 0 12px rgba(255, 105, 180, 0.6);
 }
 
 [data-theme="kawaii"] .btn-primary {
   background: linear-gradient(135deg, #ff69b4 0%, #ffb6c1 100%);
   color: white;
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 6px rgba(255, 105, 180, 0.2);
 }
 
 [data-theme="kawaii"] .theme-toggle-btn {
   background-color: #ffd1dc;
   color: #d02090;
   border-color: #ffb7c5;
+  font-weight: bold;
 }
 
 [data-theme="kawaii"] .theme-toggle-btn:hover {
   background-color: #ffc0cb;
 }
 
+[data-theme="kawaii"] .btn-table-action {
+  border-color: #ffb7c5;
+  color: #d02090;
+  background-color: #ffffff;
+}
+
 [data-theme="kawaii"] .btn-table-action.accent {
   background: linear-gradient(135deg, #ff69b4 0%, #ffb6c1 100%);
   color: white;
+  border: 1px solid #ffffff;
+}
+
+/* Wobbly buttons on hover */
+[data-theme="kawaii"] button,
+[data-theme="kawaii"] .btn-table-action,
+[data-theme="kawaii"] select {
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s ease;
+}
+
+[data-theme="kawaii"] button:hover,
+[data-theme="kawaii"] .btn-table-action:hover,
+[data-theme="kawaii"] select:hover {
+  transform: scale(1.08) rotate(-2deg);
+  box-shadow: 0 6px 12px rgba(255, 105, 180, 0.35);
+}
+
+[data-theme="kawaii"] button:active,
+[data-theme="kawaii"] .btn-table-action:active {
+  transform: scale(0.95) rotate(2deg);
+}
+
+[data-theme="kawaii"] .results-table th {
+  background-color: #ffd1dc;
+  color: #d02090;
+  font-weight: bold;
+}
+
+[data-theme="kawaii"] .results-table {
+  border: 2px dashed #ffb7c5;
+}
+
+[data-theme="kawaii"] .table-container {
+  border: 2px dashed #ffb7c5;
 }
 
 @keyframes kawaii-rainbow {
