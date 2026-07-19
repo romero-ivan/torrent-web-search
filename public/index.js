@@ -28,17 +28,7 @@ const CATEGORY_MAP = {
   '8': 'Book'
 };
 
-// Mapping for Kawaii mode (uwu/emojis)
-const KAWAII_CATEGORY_MAP = {
-  '1': 'Cute App 💻',
-  '2': 'Cuty Movie 🎬',
-  '3': 'TV Show (uwu) 📺',
-  '4': 'Kawaii Anime! 🌸',
-  '5': 'Mobile App (nwn) 📱',
-  '6': 'Fun Game! 🎮',
-  '7': 'Sweet Melody 🎵',
-  '8': 'Cute Book 📚'
-};
+
 
 // DOM Elements
 const searchForm = document.getElementById('search-form');
@@ -236,11 +226,8 @@ function renderResults(results) {
     const magnetLink = `magnet:?xt=urn:btih:${torrent.infohash}&dn=${encodeURIComponent(torrent.title)}${trackersQuery}`;
 
     // Get Human Category Info
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     const catId = String(torrent.category);
-    const categoryName = currentTheme === 'kawaii'
-      ? (KAWAII_CATEGORY_MAP[catId] || 'Cute Stuff 📦')
-      : (CATEGORY_MAP[catId] || 'Other');
+    const categoryName = CATEGORY_MAP[catId] || 'Other';
 
     // Format fields
     const formattedSize = formatSize(torrent.size);
