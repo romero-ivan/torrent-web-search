@@ -585,6 +585,7 @@ body {
   .results-table th.col-date,
   .results-table td:nth-child(6) {
     display: none;
+  }
 }
 
 /* Kawaii Mode styling */
